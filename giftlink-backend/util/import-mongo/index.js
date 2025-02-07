@@ -1,9 +1,11 @@
+// env需要与index.js同级而且等号两边不能有空格
 require('dotenv').config();
 const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
 
 // MongoDB connection URL with authentication options
 let url = `${process.env.MONGO_URL}`;
+console.log('MongoDB URL:', url); // 打印URL以确认是否正确加载
 let filename = `${__dirname}/gifts.json`;
 const dbName = 'giftdb';
 const collectionName = 'gifts';
