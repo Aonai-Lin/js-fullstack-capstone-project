@@ -5,6 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
 
+const giftRoutes = require('./routes/gitfRoutes')
+
 function App() {
 
   return (

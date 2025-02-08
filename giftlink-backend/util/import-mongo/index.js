@@ -1,4 +1,5 @@
 // env需要与index.js同级而且等号两边不能有空格
+// 把初始数据插入数据库
 require('dotenv').config();
 const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
