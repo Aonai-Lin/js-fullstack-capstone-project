@@ -8,6 +8,7 @@ let url = `${process.env.MONGO_URL}`;
 let dbInstance = null;
 const dbName = "giftdb";
 
+// 返回所连接的database对象
 async function connectToDatabase() {
     if (dbInstance){
         return dbInstance
