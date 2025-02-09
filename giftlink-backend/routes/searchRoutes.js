@@ -3,6 +3,7 @@ const router = express.Router();
 const connectToDatabase = require('../models/db');
 
 // Search for gifts
+// 从req请求获取搜索参数，去数据库查询，然后response返回
 router.get('/', async (req, res, next) => {
     try {
         // Connect to MongoDB using connectToDatabase database and store the connection in `db`

@@ -19,9 +19,8 @@ app.use(expressPino);
 // create the POST /sentiment analysis
 app.post('/sentiment', async (req, res) => {
 
-    // extract the sentence parameter
+    // extract the sentence parameter， req.query是一个对象
     const { sentence } = req.query;
-
 
     if (!sentence) {
         logger.error('No sentence provided');
@@ -38,9 +37,9 @@ app.post('/sentiment', async (req, res) => {
         const analysisResult = analyzer.getSentiment(sentence.split(' '));
         let sentiment = "neutral";
         // set sentiment to negative or positive based on score rules
-        if(sentimentScore < 0){
+        if(analysisResult < 0){
             sentiment = 'negative';
-        }else if (sentimentScore > 0.33){
+        }else if (analysisResult > 0.33){
             sentiment = 'positive';
         }
         // Logging the result
