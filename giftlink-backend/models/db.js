@@ -6,6 +6,7 @@ const MongoClient = require('mongodb').MongoClient;
 
 // MongoDB connection URL with authentication options
 let url = `${process.env.MONGO_URL}`;
+console.log("url: " + url)
 
 let dbInstance = null;
 const dbName = "giftdb";
@@ -16,8 +17,7 @@ async function connectToDatabase() {
         return dbInstance
     };
 
-    const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });      
-
+    const client = new MongoClient(url);
     try{
         // Connect to MongoDB, connect to database giftDB and store in variable dbInstance and return
         await client.connect();

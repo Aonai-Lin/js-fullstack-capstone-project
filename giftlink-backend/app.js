@@ -20,7 +20,7 @@ connectToDatabase().then(() => {
 
 
 app.use(express.json());
-app.use()
+// app.use()
 
 // Route files
 const giftRoutes = require('./routes/giftRoutes');
@@ -48,5 +48,5 @@ app.get("/",(req,res)=>{
 })
 
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+    console.log(`Server running on port ${port}, the url is: http://localhost:${port}}`);
 });

@@ -23,6 +23,7 @@ body::before {
     height: 100%;
     background: url('/static/background-colors.jpg');
     filter: blur(8px);  /* Slightly reduced blur effect */
+    z-index: -1; /*确保背景在内容下方*/
     
 }
 
@@ -32,7 +33,7 @@ body::before {
     position: relative;
     text-align: center;
 
-    z-index: 2; /* Higher z-index to ensure content is above the blurred background */
+    /* z-index: 2;  */
     font-weight: 600;
     color: #1a1a1a; /* Updated text color for better readability */
     max-width: 1200px;
