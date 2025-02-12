@@ -4,7 +4,7 @@ import {urlConfig} from '../../config';
 
 function MainPage() {
     const [gifts, setGifts] = useState([]);
-    const navigate = useNavigate();     // ??
+    const navigate = useNavigate();  
 
     useEffect(() => {
         fetchGifts();
@@ -27,7 +27,9 @@ function MainPage() {
         }
     }
 
-    // Navigate to details page ???
+    // Navigate to details page
+    // 在组件中获取导航功能，编程式地改变当前的 URL 路径
+    // 需要在/app的Route中定义`/app/product/${productId}`的路由，定义跳转的页面
     const goToDetailsPage = (productId) => {
         navigate(`/app/product/${productId}`);
       };
@@ -51,7 +53,7 @@ function MainPage() {
                             <div className='image-placeholder'>
                                 {/* conditional rendering */}
                                 {gift.image ? (
-                                    <img src={gift.image} alt={gift.name} />    // gift.img没有东西
+                                    <img src={gift.image} alt={gift.name} />    // 要用gift.image，gift.img没有东西
                                 ) : (
                                     <div className='no-image-acailable'>No Image Available</div>
                                 )}
