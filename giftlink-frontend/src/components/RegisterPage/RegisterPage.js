@@ -18,7 +18,7 @@ function RegisterPage() {
                 <div className='col-md-6 clo-lg-4'>
                     <div className='register-card p-4 border rounder'>
                         <h2 className='text-center mb-4 font-weight-bold'>Register</h2>
-                        {/* first name, 每个变量有自己的div，div里买呢有label和input，htmlFor关联表单的id*/}
+                        {/* first name, 每个变量有自己的div，div里有label和input，htmlFor关联表单的id*/}
                         <div className='mb-3'>
                             <label htmlFor='firstName' className='form-label'>FirstName</label>
                             <input
@@ -55,7 +55,7 @@ function RegisterPage() {
                             />
                         </div>
                         {/* password */}
-                        <div className='mb-3'>
+                        <div className='mb-4'>
                             <label htmlFor='password' className='form-label'>Password</label>
                             <input
                                 id='password'

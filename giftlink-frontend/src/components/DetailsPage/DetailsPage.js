@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './DetailsPage.css';
+import { urlConfig } from '../../config';
+
 
 function DetailsPage() {
     const navigate = useNavigate();
@@ -12,15 +14,17 @@ function DetailsPage() {
 	useEffect(() => {
         const authenticationToken = sessionStorage.getItem('auth-token');
         if (!authenticationToken) {
-			// Task 1: Check for authentication and redirect
-            {{insert code here}}
+			// Check for authentication and redirect
+            navigate('/app/login');
         }
 
         // get the gift to be rendered on the details page
         const fetchGift = async () => {
             try {
-				// Task 2: Fetch gift details
-                const response ={{insert code here}}
+				// Fetch gift details,获取对应id的gift
+                // urlConfig.backendUrl==>后端的服务器的url，用前端app去访问后端服务器页面，后端服务器会在数据库查找然后返回fetch的数据
+                const url = `${urlConfig.backendUrl}/api/gifts/${productId}`
+                const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -35,15 +39,15 @@ function DetailsPage() {
 
         fetchGift();
 
-		// Task 3: Scroll to top on component mount
-		{{ insert code here }}
+		// Scroll to top on component mount
+		window.scrollTo(0,0);
 
     }, [productId]);
 
 
     const handleBackClick = () => {
-		// Task 4: Handle back click
-		{{ insert code here }}
+		// Handle back click，-1: to the last page
+		navigate(-1);
 	};
 
 	//The comments have been hardcoded for this project.
@@ -76,6 +80,7 @@ function DetailsPage() {
     if (!gift) return <div>Gift not found</div>;
 
 return (
+    <div>
         <div className="container mt-5">
             <button className="btn btn-secondary mb-3" onClick={handleBackClick}>Back</button>
             <div className="card product-details-card">
@@ -84,45 +89,37 @@ return (
                 </div>
                 <div className="card-body">
                     <div className="image-placeholder-large">
+                        {/* Display gift image */}
                         {gift.image ? (
-			// Task 5: Display gift image
-			/*insert code here*/
+                            <img src={gift.image} alt={gift.name} className='product-image-large'/>
                         ) : (
-                            <div className="no-image-available-large">No Image Available</div>
-                        )}
+                            <div className="no-image-available-large"> No Image Available</div>)}
                     </div>
-                    // Task 6: Display gift details
-                    	<p><strong>Category:</strong> 
-				{/* insert code here  */}
-			</p>
-                    	<p><strong>Condition:</strong> 
-				{/* insert code here  */}
-                    	</p>
-                    	<p><strong>Date Added:</strong> 
-				{/* insert code here  */}
-                        </p>
-                    	<p><strong>Age (Years):</strong> 
-				{/* insert code here  */}
-                    	</p>
-                    	<p><strong>Description:</strong> 
-				{/* insert code here  */}
-                    	</p>
                 </div>
             </div>
-            <div className="comments-section mt-4">
-                <h3 className="mb-3">Comments</h3>
-				// Task 7: Render comments section by using the map function to go through all the comments
-				{{ insert code here }} => (
-                    <div key={index} className="card mb-3">
-                        <div className="card-body">
-                            <p className="comment-author"><strong>{comment.author}:</strong></p>
-                            <p className="comment-text">{comment.comment}</p>
-                        </div>
-                    </div>
-                ))}
+            <div>
+            {/*   Display gift details, base on the data in the db */}
+                <p><strong>Category:</strong> {gift.category}</p>
+                <p><strong>Condition:</strong> {gift.condition}</p>
+                <p><strong>Date Added:</strong> {gift.date_added}</p>
+                <p><strong>Age:</strong> {gift.age_days} days</p>
+                <p><strong>Description:</strong> {gift.description}</p>
             </div>
         </div>
-    );
+        <div className="comments-section mt-4">
+            <h3 className="mb-3">Comments</h3>
+            {/* Render comments section by using the map function to go through all the comments */}
+            { comments.map((comment, index) => (
+                <div key={index} className="card mb-3">
+                    <div className="card-body">
+                        <p className="comment-author"><strong>{comment.author}:</strong></p>
+                        <p className="comment-text">{comment.comment}</p>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+);
 }
 
 export default DetailsPage;
