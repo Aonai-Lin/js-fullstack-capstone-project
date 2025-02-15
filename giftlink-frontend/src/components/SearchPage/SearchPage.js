@@ -80,7 +80,7 @@ function SearchPage() {
                     <div className="filter-section mb-3 p-3 border rounded">
                         <h5>Filters</h5>
                         <div className="d-flex flex-column">
-                            {/* Dynamically generate category dropdown options.*/}
+                            {/* set a select area and dynamically generate category dropdown options.*/}
                             <label htmlFor='categorySelect'>Category</label>
                             <select id='categorySelect' className='form-control my-1'>
                                 <option value=''>All</option>
@@ -89,7 +89,7 @@ function SearchPage() {
                                 ))}
                             </select>
 
-                            {/* Dynamically generate category dropdown options.*/}
+                            {/* set a select area and dynamically generate category dropdown options.*/}
                             <label htmlFor='conditionSelect'>Condition</label>
                             <select id='conditionSelect' className='form-control my-1'>
                                 <option value=''>All</option>
