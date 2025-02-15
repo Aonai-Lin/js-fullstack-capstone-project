@@ -28,7 +28,7 @@ async function loadData() {
 
         // collection will be created if it does not exist
         const collection = db.collection(collectionName);
-        let cursor = await collection.find({});
+        let cursor = collection.find({});
         let documents = await cursor.toArray();
 
         if(documents.length == 0) {
