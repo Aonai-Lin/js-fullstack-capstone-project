@@ -27,7 +27,7 @@ function LoginPage() {
                                 className='form-control'
                                 placeholder='Enter your email'
                                 value={email}
-                                onChange={() => setEmail(e.target.value)}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
                         { /* password */}
@@ -39,7 +39,7 @@ function LoginPage() {
                                 className='form-control'
                                 placeholder='Enter your password'
                                 value={password}
-                                onChange={() => setEmail(e.target.value)}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
                         <button className='btn btn-primary w-100 mb-3' onClick={handleLogin}>Login</button>
