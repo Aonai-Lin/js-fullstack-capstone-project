@@ -30,6 +30,7 @@ router.post('/register', async (req, res) => {
         const salt = await bcryptjs.genSalt(10);
         const hash = await bcryptjs.hash(req.body.password, salt);
         const email = req.body.email;
+        const userName = req.body.firstName;
 
         // 存储用户，Save user details in database，preserve  the ref
         // 密码应存储为密文
@@ -41,7 +42,6 @@ router.post('/register', async (req, res) => {
             createdAt: new Date(),
         });
             
-
         const payload = {
             user: {
                 id: newUser.insertedId,
@@ -50,7 +50,7 @@ router.post('/register', async (req, res) => {
 
         const authtoken = jwt.sign(payload, JWT_SECRET);    // token由Header， Payload，Signature组成
         logger.info(`User registered successfully: ${email}`);
-        res.json({authtoken, email});
+        res.json({authtoken, email, userName});
 
     }catch(e){
         // send返回的是纯文本格式，在前端需要用response.text()解析，要想用response.json()解析需要用json格式返回
@@ -59,6 +59,42 @@ router.post('/register', async (req, res) => {
 
     }
 
+});
+
+router.post('/login', async (req, res) => {
+
+    try{
+        const db = await connectToDatabase();   // Connect to `giftsdb` in MongoDB
+        const collection = db.collection('users'); // retrive the target collection
+        const theUser = await collection.findOne({email: req.body.email});  // check user credentials
+        
+        if(theUser){
+            // check whether the password matchs
+            let result = await bcryptjs.compare(req.body.password, theUser.password);
+            if(!result){
+                logger.error('Password do not match!');
+                return res.status(404).json({error: 'wrong password'});
+            }
+    
+            // Fetch user details in database
+            const userName = theUser.firstName;
+            const userEmail = theUser.email;
+    
+            // Create JWT authentication if passwords match with user._id as payload
+            const payload = {
+                user: {
+                    id: theUser._id.toString(),
+                },
+            };
+    
+            const authtoken = jwt.sign(payload, JWT_SECRET);
+            logger.info('User logged in successfully!');
+            return res.status(200).json({authtoken, userName, userEmail});
+        }
+    }catch(e){
+        logger.error(e);
+        return res.status(500).json({error: 'Internal server error', details: e.message});
+    }
 });
 
 export default router;

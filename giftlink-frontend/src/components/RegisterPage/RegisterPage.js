@@ -38,7 +38,7 @@ function RegisterPage() {
             console.log('er', json.error);
 
             // Set user details if there is an authtoken
-            // 前端的token只管安排上，到后端自有校验
+            // 前端收到后端在HTTP响应的body（正文）中的token后会存储在本地的session中
             if(json.authtoken){
                 sessionStorage.setItem('auth-token', json.authtoken);
                 sessionStorage.setItem('name', firstName);
