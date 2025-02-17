@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import './RegisterPage.css';
+import { urlConfig } from '../../config';
+import { useAppContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
 
 function RegisterPage() {
     // create useState hook variables for firstName, lastName, email, password
@@ -7,11 +11,53 @@ function RegisterPage() {
     const [lastName, setLastName] = useState('lastname');
     const [email, setEmail] = useState('email');
     const [password, setPassword] = useState('password');
+    const [showerr, setShowerr] = useState('');   // state for error message.
+    const navigate = useNavigate();
+    const { setIsLoggedIn } = useAppContext();  // 访问（消费）context的内容
+
 
     //  create handleRegister function and include console.log(temperary)
     const handleRegister = async () => {
-        console.log("Register invoked");
+        try{
+            // 按下Register按钮后，用post方法访问后端服务器的register end point
+            const response = await fetch(`${urlConfig.backendUrl}/api/auth/register`, {
+                method: 'POST',
+                headers: {
+                    'content-type': application/json,
+                },
+                body: JSON.stringify({
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    password: password,
+                }),
+            });
+            // 访问fetch到的数据
+            const json = await response.json();
+            console.log('json data', json);
+            console.log('er', json.error);
+
+            // Set user details if there is an authtoken
+            // 前端的token只管安排上，到后端自有校验
+            if(json.authtoken){
+                sessionStorage.setItem('auth-token', json.authtoken);
+                sessionStorage.setItem('name', firstName);
+                sessionStorage.setItem('email', json.email);
+
+                setIsLoggedIn(true);    // Set the state of user to logged in
+                navigate('/app');   // Navigate to the MainPage after logging in
+            }
+
+            if(json.error){    // Set an error message if the registration fails.
+                setShowerr(json.error);
+                throw new Error(json.error);
+            }
+
+        }catch(e){
+            return (<div className='text-danger'>{showerr}</div>)
+        }
     }
+    
     return (
         <div className='container mt-5'>
             <div className='row justify-content-center'>

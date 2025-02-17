@@ -31,7 +31,7 @@ router.post('/register', async (req, res) => {
         const hash = await bcryptjs.hash(req.body.password, salt);
         const email = req.body.email;
 
-        // Save user details in database，preserve  the ref
+        // 存储用户，Save user details in database，preserve  the ref
         // 密码应存储为密文
         const newUser = await collection.insertOne({
             email: req.body.email,
@@ -48,15 +48,22 @@ router.post('/register', async (req, res) => {
             },
         };
 
-        const authtoken = jwt.sign(payload, JWT_SECRET);
+        const authtoken = jwt.sign(payload, JWT_SECRET);    // token由Header， Payload，Signature组成
         logger.info(`User registered successfully: ${email}`);
         res.json({authtoken, email});
 
-
     }catch(e){
-        return res.status(500).send(e.message);
+        // send返回的是纯文本格式，在前端需要用response.text()解析，要想用response.json()解析需要用json格式返回
+        // return res.status(500).send(e.message);
+        return res.status(500).json({e: e.message});
+
     }
 
 });
 
 export default router;
+
+// res.json() 将 JavaScript 对象或数组序列化为 JSON 字符串，
+// 并将其作为 HTTP 响应的正文（body）发送给客户端。
+// 同时，它还会自动设置 HTTP 响应的 Content-Type 头部为 application/json，
+// 以告知客户端响应的内容类型是 JSON。
