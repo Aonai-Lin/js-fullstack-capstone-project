@@ -90,6 +90,8 @@ router.post('/login', async (req, res) => {
             const authtoken = jwt.sign(payload, JWT_SECRET);
             logger.info('User logged in successfully!');
             return res.status(200).json({authtoken, userName, userEmail});
+        }else{
+            throw new Error('User does not exist, please register first!');
         }
     }catch(e){
         logger.error(e);
