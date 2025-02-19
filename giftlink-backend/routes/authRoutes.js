@@ -1,3 +1,5 @@
+import { ReturnDocument } from 'mongodb';
+
 // Import necessary packages
 const express = require('express');
 const router = express.Router();
@@ -7,6 +9,7 @@ const { body, validationResult } = require('express-validator');
 const connectToDatabase = require('../models/db');
 const dotenv = require('dotenv');
 const pino = require('pino');
+
 
 
 const logger = pino(); // Create a Pino logger instance
@@ -28,7 +31,7 @@ router.post('/register', async (req, res) => {
     
         // Create JWT authentication
         const salt = await bcryptjs.genSalt(10);
-        const hash = await bcryptjs.hash(req.body.password, salt);
+        const hash_password = await bcryptjs.hash(req.body.password, salt);
         const email = req.body.email;
         const userName = req.body.firstName;
 
@@ -38,7 +41,7 @@ router.post('/register', async (req, res) => {
             email: req.body.email,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
-            password: hash,
+            password: hash_password,
             createdAt: new Date(),
         });
             
@@ -56,7 +59,6 @@ router.post('/register', async (req, res) => {
         // send返回的是纯文本格式，在前端需要用response.text()解析，要想用response.json()解析需要用json格式返回
         // return res.status(500).send(e.message);
         return res.status(500).json({e: e.message});
-
     }
 
 });
@@ -70,8 +72,8 @@ router.post('/login', async (req, res) => {
         
         if(theUser){
             // check whether the password matchs
-            let result = await bcryptjs.compare(req.body.password, theUser.password);
-            if(!result){
+            let password_match = await bcryptjs.compare(req.body.password, theUser.password);
+            if(!password_match){
                 logger.error('Password do not match!');
                 return res.status(404).json({error: 'wrong password'});
             }
@@ -96,6 +98,64 @@ router.post('/login', async (req, res) => {
     }catch(e){
         logger.error(e);
         return res.status(500).json({error: 'Internal server error', details: e.message});
+    }
+});
+
+// 更新用户信息，并在成功更新后生成一个新的 JWT 令牌
+router.put('/update', async (req, res) => {
+
+    // 检查请求对象 req 是否通过了之前定义的所有验证中间件（middleware），或可在处理函数前添加验证规则
+    const errors = validationResult(req);
+
+    // if there is a validate error
+    if(!errors.isEmpty()){
+        logger.error('Validation error in update request', errors.array());
+        return res.status(400).json({errors: errors.array()});
+    }
+
+    try{
+        const email = req.headers.email;    // 
+        if(!email){
+            logger.error('Email not found in the request headers');
+            return res.status(400).json({error: "Email not found in the request headers"});
+        }
+
+        // connect to MongoDB and target collection
+        const db = await connectToDatabase();
+        const collection = db.collection('users');
+
+        // find user credential 
+        const existingUser = await collection.findOne({email});
+        if (!existingUser){
+            logger.error('User not found');
+            return res.status(400).json({error: 'User not found'});
+        }
+
+        // update the user attribute in memory, existingUser is an object here
+        existingUser.firstName = req.body.name;
+        existingUser.updateAt = new Date();
+
+        // update user credential in Database
+        const updatedUser = await collection.findOneAndUpdate(  // 更新单个文档的首选，可确保文档存在、获取更新后的文档、原子操作、条件更新和错误处理
+            { email },
+            { $set: existingUser },
+            { ReturnDocument: 'after'}
+        );
+
+        // create JWT authentication with user._id as payload using secret key from .env file
+        const payload = {
+            user: {
+                id: updatedUser._id.toString(),
+            },
+        };
+
+        const authtoken = jwt.sign(payload, JWT_SECRET);
+        logger.info('User updated successfully');
+        res.json({ authtoken });
+
+    }catch(e){
+        logger.error(e);
+        return res.status(500).send("Internal Server Error");
     }
 });
 
