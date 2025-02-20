@@ -23,8 +23,9 @@ function DetailsPage() {
             try {
 				// Fetch gift details,获取对应id的gift
                 // urlConfig.backendUrl==>后端的服务器的url，用前端app去访问后端服务器页面，后端服务器会在数据库查找然后返回fetch的数据
-                const url = `${urlConfig.backendUrl}/api/gifts/${productId}`
+                const url = `${urlConfig.backendUrl}/api/gifts/${productId}`;
                 const response = await fetch(url); 
+                
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }

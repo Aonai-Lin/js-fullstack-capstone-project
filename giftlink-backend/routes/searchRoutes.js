@@ -36,6 +36,7 @@ router.get('/', async (req, res, next) => {
         // Fetch filtered gifts using the find(query) method. Use await and store the result in the `gifts` constant
         // find函数的参数是一个字典对象（键值对）
         const gifts = await collection.find(query).toArray();
+        console.log("founded results:", gifts);
 
         res.json(gifts);
     } catch (e) {

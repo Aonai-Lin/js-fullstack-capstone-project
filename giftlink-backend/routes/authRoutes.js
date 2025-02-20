@@ -1,4 +1,3 @@
-import { ReturnDocument } from 'mongodb';
 
 // Import necessary packages
 const express = require('express');
@@ -26,7 +25,9 @@ router.post('/register', async (req, res) => {
         const existingEmail = await collection.findOne({email: req.body.email});  // user info contain in req.body
         // error: user existed
         if (existingEmail){
-            throw new Error("User already exist, please login");
+            // throw new Error("User already exist, please login");
+            console.log('existing user!');
+            return res.status(400).json({ error: "User already exists, please log in" });
         }
     
         // Create JWT authentication
@@ -58,6 +59,7 @@ router.post('/register', async (req, res) => {
     }catch(e){
         // send返回的是纯文本格式，在前端需要用response.text()解析，要想用response.json()解析需要用json格式返回
         // return res.status(500).send(e.message);
+        logger.error(`Registration failed: ${e.message}`);
         return res.status(500).json({e: e.message});
     }
 
@@ -139,7 +141,7 @@ router.put('/update', async (req, res) => {
         const updatedUser = await collection.findOneAndUpdate(  // 更新单个文档的首选，可确保文档存在、获取更新后的文档、原子操作、条件更新和错误处理
             { email },
             { $set: existingUser },
-            { ReturnDocument: 'after'}
+            { returnDocument: 'after'}
         );
 
         // create JWT authentication with user._id as payload using secret key from .env file
@@ -159,7 +161,7 @@ router.put('/update', async (req, res) => {
     }
 });
 
-export default router;
+module.exports = router;
 
 // res.json() 将 JavaScript 对象或数组序列化为 JSON 字符串，
 // 并将其作为 HTTP 响应的正文（body）发送给客户端。
