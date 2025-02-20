@@ -50,7 +50,7 @@ function SearchPage() {
 
         // try to fetch target data
         try{
-            const url = `${baseUrl}${queryParams}`;
+            const url = `${baseUrl}/api/search?${queryParams}`; // bug，查询参数要有问号！
             const response = await fetch(url);
             if(!response.ok){
                 throw new Error('search failed, response not ok');
@@ -64,7 +64,6 @@ function SearchPage() {
     }
 
     const navigate = useNavigate();
-
     const goToDetailsPage = (productId) => {
         // Enable navigation to the details page of a selected gift.
         navigate(`/app/product/${productId}`);

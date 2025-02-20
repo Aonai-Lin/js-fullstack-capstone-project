@@ -7,10 +7,10 @@ import { useNavigate } from 'react-router-dom';
 
 function RegisterPage() {
     // create useState hook variables for firstName, lastName, email, password
-    const [firstName, setFirstName] = useState('firstname');
-    const [lastName, setLastName] = useState('lastname');
-    const [email, setEmail] = useState('email');
-    const [password, setPassword] = useState('password');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [showerr, setShowerr] = useState('');   // state for error message.
     const navigate = useNavigate();
     const { setIsLoggedIn } = useAppContext();  // 访问（消费）context的内容
@@ -23,7 +23,7 @@ function RegisterPage() {
             const response = await fetch(`${urlConfig.backendUrl}/api/auth/register`, {
                 method: 'POST',
                 headers: {
-                    'content-type': application/json,
+                    'content-type': 'application/json',
                 },
                 body: JSON.stringify({
                     firstName: firstName,
@@ -48,13 +48,13 @@ function RegisterPage() {
                 navigate('/app');   // Navigate to the MainPage after logging in
             }
 
-            if(json.error){    // Set an error message if the registration fails.
-                setShowerr(json.error);
-                throw new Error(json.error);
+            if(json.error){   
+                setShowerr(json.error); // Display error message
+                return;
             }
 
         }catch(e){
-            return (<div className='text-danger'>{showerr}</div>)
+            setShowerr(`Registration failed: ${e.message}`); // Display generic error message
         }
     }
     
@@ -118,6 +118,8 @@ function RegisterPage() {
                             Already a member? <a href='/app/login' className='text-primary'>Login</a>
                         </p>
                     </div>
+                    {/* raise the error message */}
+                    {showerr && (<div className="alert alert-danger text-center" role="alert">{showerr}</div>)} 
                 </div>
             </div>
         </div>

@@ -42,3 +42,10 @@ a.text-primary:hover {
 a.text-secondary:hover {
     text-decoration: underline;
 }
+
+input::placeholder,
+textarea::placeholder {
+  color: #aaa; /* 设置为灰色或其他淡色 */
+  font-style: italic; /* 可选：让文本看起来更虚化 */
+  opacity: 0.6; /* 确保占位符透明度较低 */
+}

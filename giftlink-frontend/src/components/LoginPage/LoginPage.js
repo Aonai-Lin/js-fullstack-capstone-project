@@ -44,7 +44,7 @@ function LoginPage() {
 
         // process the response from the server
         const json = await res.json();
-        console.log('Json', json);
+        // console.log('Json', json);
         // set user details for the frontend
         if(json.authtoken){
             sessionStorage.setItem('auth-token', json.authtoken);

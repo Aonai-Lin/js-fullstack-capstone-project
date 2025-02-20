@@ -36,7 +36,8 @@ export default function Navbar() {
     // handle logout
     const handleLogout = () => {
         logoutProcess();
-        navigate('/app');
+        // navigate('/app');
+        window.location.href = '/home.html';
     };
 
     const profileSecton = () => {
@@ -48,7 +49,8 @@ export default function Navbar() {
             {/* 导览栏，GiftLink、Home、Gifts、Search是固定的，其余login、logout、register、username根据登陆状态来渲染 */}
             <nav className="navbar navbar-expand-lg navbar-light bg-light" id='navbar_container'>
                 {/* <a className="navbar-brand" href="/">GiftLink</a> */}
-                <a className="navbar-brand" href={`${urlConfig.backendUrl}/app`}>GiftLink</a>
+                {/* <a className="navbar-brand" href={`${urlConfig.backendUrl}`}>GiftLink</a> */}
+                <Link className="navbar-brand" to='/app'>GiftLink</Link>
                 {/* 将id为navbarNav的部件弄成响应式设计 */}
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
