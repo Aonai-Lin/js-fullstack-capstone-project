@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-
+/* eslint-disable react/prop-types */
 // 创建一个上下文(context)对象，名为AppContext，用于在组件树中传递数据，初始值为undefined
 const AppContext = createContext();
 

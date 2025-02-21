@@ -8,7 +8,7 @@ const connectToDatabase = require('../models/db');
 router.get('/', async (req, res, next) => {
     try {
         // Connect to MongoDB using connectToDatabase database and store the connection in `db`
-        db = await connectToDatabase();
+        const db = await connectToDatabase();
 
         const collection = db.collection("gifts");
 

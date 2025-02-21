@@ -1,3 +1,4 @@
+/* eslint-env es8 */
 const express = require('express');
 const router = express.Router();
 // 从models/db/js引入数据库连接函数
