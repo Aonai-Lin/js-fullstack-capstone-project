@@ -23,6 +23,14 @@ jobs:
       - name: Install ESLint
         run: npm install eslint --global
 
+      - name: Install Project Dependencies
+        run: npm install
+
+      - name: Verify Installed Dependencies
+        run: |
+          npm list globals
+          npm list eslint
+
       - name: Run Linter
         run: |
           # This command finds all JavaScript files recursively and runs ESlint on them
