@@ -20,33 +20,18 @@ jobs:
         with:
           node-version: 16
 
-      # - name: Install ESLint
-      #   run: npm install eslint --global
-
-      # - name: Run Linter
-      #   run: |
-      #     # This command finds all JavaScript files recursively and runs ESlint on them
-      #     find ./giftlink-backend -name app.js -exec eslint {} +
-      #     find ./giftlink-backend -name authRoutes.js -exec eslint {} +
-      #     find ./giftlink-backend -name giftRoutes.js -exec eslint {} +
-      #     find ./giftlink-backend -name searchRoutes.js -exec eslint {} +
-      #     echo "Linted all the js files successfully"
-
-      - name: Install Project Dependencies
-        run: |
-          cd giftlink-backend
-          npm install
-
-      - name: Verify Installed Dependencies
-        run: |
-          cd giftlink-backend
-          npm list globals
-          npm list eslint
+      - name: Install ESLint
+        run: npm install eslint --global
 
       - name: Run Linter
         run: |
-          cd giftlink-backend
-          npx eslint .
+          # This command finds all JavaScript files recursively and runs ESlint on them
+          find ./giftlink-backend -name app.js -exec eslint {} +
+          find ./giftlink-backend -name authRoutes.js -exec eslint {} +
+          find ./giftlink-backend -name giftRoutes.js -exec eslint {} +
+          find ./giftlink-backend -name searchRoutes.js -exec eslint {} +
+          echo "Linted all the js files successfully"
+
 
   client_build:
       name: Build client
