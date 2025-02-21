@@ -8,29 +8,28 @@ on:
 
 jobs:
   lint_js:
-      name: Lint JavaScript Files
-      runs-on: ubuntu-latest
+    name: Lint JavaScript Files
+    runs-on: ubuntu-latest
 
-      steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
 
-      - name: Install ESLint
-        run: npm install eslint --global
+    - name: Install Dependencies  # 新增的关键步骤
+      run: npm install
 
-      - name: Run Linter
-        run: |
-          # This command finds all JavaScript files recursively and runs ESlint on them
-          find ./giftlink-backend -name app.js -exec eslint {} +
-          find ./giftlink-backend -name authRoutes.js -exec eslint {} +
-          find ./giftlink-backend -name giftRoutes.js -exec eslint {} +
-          find ./giftlink-backend -name searchRoutes.js -exec eslint {} +
-          echo "Linted all the js files successfully"
+    - name: Run Linter
+      run: |
+        find ./giftlink-backend -name app.js -exec npx eslint {} +
+        find ./giftlink-backend -name authRoutes.js -exec npx eslint {} +
+        find ./giftlink-backend -name giftRoutes.js -exec npx eslint {} +
+        find ./giftlink-backend -name searchRoutes.js -exec npx eslint {} +
+        echo "Linted all the js files successfully"
 
 
   client_build:
