@@ -1,4 +1,4 @@
-/*jshint esversion: 8 */
+/* eslint-env es8 */
 
 // Import necessary packages
 const express = require('express');

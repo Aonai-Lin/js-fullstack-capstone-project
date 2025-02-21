@@ -20,22 +20,20 @@ export default function Navbar() {
                 setUserName(nameFromSession);
             } else {
                 // if is logged out, update the session，==logout
-                logoutProcess();
+                sessionStorage.removeItem('auth-token');
+                sessionStorage.removeItem('name');
+                sessionStorage.removeItem('email');
+                setIsLoggedIn(false);
             }
         };
-    }, [isLoggedIn, setIsLoggedIn, setUserName, logoutProcess]);   // 直接依赖只有isLoggedIn，把setIsLoggedIn, setUserName写上是为了防止函数的引用变更导致闭包陷阱
+    }, [isLoggedIn, setIsLoggedIn, setUserName]);   // 直接依赖只有isLoggedIn，把setIsLoggedIn, setUserName写上是为了防止函数的引用变更导致闭包陷阱
 
-    // logout process
-    const logoutProcess = () => {
+    // handle logout
+    const handleLogout = () => {
         sessionStorage.removeItem('auth-token');
         sessionStorage.removeItem('name');
         sessionStorage.removeItem('email');
         setIsLoggedIn(false);
-    };
-
-    // handle logout
-    const handleLogout = () => {
-        logoutProcess();
         // navigate('/app');
         window.location.href = '/home.html';
     };
