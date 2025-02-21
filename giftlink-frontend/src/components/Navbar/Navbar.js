@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { urlConfig } from '../../config';
+// import { urlConfig } from '../../config';
 import { useAppContext } from '../../context/AuthContext';
 
 export default function Navbar() {
@@ -23,7 +23,7 @@ export default function Navbar() {
                 logoutProcess();
             }
         };
-    }, [isLoggedIn, setIsLoggedIn, setUserName]);   // 直接依赖只有isLoggedIn，把setIsLoggedIn, setUserName写上是为了防止函数的引用变更导致闭包陷阱
+    }, [isLoggedIn, setIsLoggedIn, setUserName, logoutProcess]);   // 直接依赖只有isLoggedIn，把setIsLoggedIn, setUserName写上是为了防止函数的引用变更导致闭包陷阱
 
     // logout process
     const logoutProcess = () => {
