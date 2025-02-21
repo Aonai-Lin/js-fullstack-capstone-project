@@ -31,5 +31,11 @@
     "nodemon": "^3.0.2",
     "sinon": "^17.0.1",
     "supertest": "^6.3.3"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 2015,
+      "sourceType": "module"
+    }
   }
 }
