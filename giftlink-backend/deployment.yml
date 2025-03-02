@@ -1,0 +1,37 @@
+apiVersion: apps/v1   # 指定 Kubernetes API 的版本
+kind: Deployment      # 定义资源类型为 Deployment，用于管理 Pod 的部署和更新
+metadata:
+  name: giftapp
+  labels:
+    app: giftapp
+spec:                 # 定义 Deployment 的规格（配置）
+  replicas: 2         # 确保始终有 2 个 giftapp Pod 在运行
+  selector:           # 定义 Deployment 如何选择要管理的 Pod
+    matchLabels:
+      app: giftapp    # 选择所有带有标签 app: giftapp 的 Pod
+  template:           # pod的模板
+    metadata:
+      labels:
+        app: giftapp
+    spec:             # 定义 Pod 的规格（即配置）
+      containers:     # 定义 Pod 中的容器
+      - name: giftapp-container   # 容器名
+        image: au.icr.io/coursera/giftapp    # <the-name-of-your-image> 容器使用的 Docker 镜像
+        ports:
+        - containerPort: 3060 # 定义容器的expose端口，容器监听端口为3060
+      imagePullSecrets:
+      - name: icr      # 使用名为 icr 的 Secret 来拉取镜像（通常用于私有镜像仓库的认证），要先配置过icr Secret
+
+---
+apiVersion: v1    # 指定 Kubernetes API 的版本。v1 是核心 API 版本，用于定义 Service 资源
+kind: Service
+metadata:
+  name: gift-app-service    # 这个 Service 资源命名为 gift-app-service
+spec:             # 定义 Service 的规格（即配置）
+  type: NodePort  # 定义 Service 的类型为 NodePort。NodePort 会将服务暴露在集群节点的静态端口上，允许外部访问
+  ports:          # 端口配置
+  - port: 80      # 在集群内部暴露的端口，用于集群内部通信。
+    targetPort: 3060  # 将流量转发到 Pod 的 3060 端口（即 giftapp-container 容器监听的端口）
+    protocol: TCP # Service 配置中没有 nodePort，Kubernetes 会自动分配一个 nodePort（范围是 30000-32767）。
+  selector:
+    app: giftapp

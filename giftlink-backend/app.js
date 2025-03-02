@@ -40,7 +40,7 @@ app.use('/api/auth', authRoutes);
 
 
 // Global Error Handler
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
     console.error(err);
     res.status(500).send('Internal Server Error');
 });

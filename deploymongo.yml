@@ -1,0 +1,32 @@
+apiVersion: apps/v1   # deployment通常使用app/v1
+kind: Deployment      # 定义资源类型为 Deployment，用于管理 Pod 的部署和更新
+metadata:
+  name: mongodb-deployment  
+spec:
+  replicas: 1         # 1 pod
+  selector:
+    matchLabels:
+      app: mongodb    # 选择所有带有标签 app: mongodb 的 Pod
+  template:           # 定义 Pod 的模板
+    metadata:         # 定义 Pod 的metadata
+      labels:
+        app: mongodb  # pod的标签为app: mongodb
+    spec:             # 定义 Pod 的配置
+      containers:
+      - name: mongodb # pod的容器名为mongodb
+        image: mongo:latest # 容器使用的 Docker 镜像为 mongo:latest（MongoDB 官方镜像的最新版本）
+        ports:
+        - containerPort: 27017  # 定义容器的expose端口，容器监听端口为 27017（MongoDB 的默认端口）
+---
+apiVersion: v1  # api版本，v1 是核心 API 版本，用于定义 Service 资源
+kind: Service   # 定义资源类型为 Service。Service 用于为 Pod 提供稳定的网络访问
+metadata:
+  name: mongodb-service # 这个 Service 资源命名为 mongodb-service
+spec:                   # 定义这个Service 的规格（即配置）
+  type: NodePort        # 定义 Service 的类型为 NodePort。NodePort 会将服务暴露在集群节点的静态端口上，允许外部访问
+  ports:                # 端口配置
+  - port: 27017         # 在集群内部暴露的端口，用于集群内部通信。
+    targetPort: 27017   # 将流量转发到 Pod 的 27017 端口（即 MongoDB 容器监听的端口），接收到外部访问的请求时，内部把请求发到targetPort
+    nodePort: 30007     # Service 暴露在集群节点的 30007 端口上。外部可以通过 节点IP:30007 访问 MongoDB，mongodb://<节点IP>:30007
+  selector:             # 定义 Service 如何选择要管理的 Pod
+    app: mongodb        # 选择所有带有标签 app: mongodb 的 Pod
